@@ -75,9 +75,7 @@ app.listen(process.env.PORT, () =>
 ## 🏗 3️⃣ Schema & TypeScript Interface
 
 ```ts
-import mongoose, { Document } from "mongoose";
-
-export interface IProduct extends Document {
+export interface IProduct {
   name: string;
   category: string;
   price: number;
@@ -88,6 +86,8 @@ export interface IProduct extends Document {
 ```
 
 👉 Interface = **Type safety**
+
+> ⚠️ **Note:** No need to `extend Document` here — since Mongoose 6+ (this course uses Mongoose 9), `mongoose.Schema<IProduct>` and `mongoose.model<IProduct>(...)` automatically add all of `Document`'s built-in properties (`_id`, `.save()`, etc.) for you.
 
 ---
 
@@ -411,3 +411,14 @@ db.users.find({ email: "rana@gmail.com" })
 ---
 
 ## 🏗 Hands-On: Build a RESTful API with MongoDB and TypeScript
+
+Using everything from this class, build a small **Product Catalog API**:
+
+1. Create the `IProduct` interface and Mongoose schema shown above (`name`, `category`, `price`, `inStock`, `tags`, `createdAt`).
+2. `GET /products` — support `?category=...` filtering and `?minPrice=...&maxPrice=...` range filtering using `$gte`/`$lte`.
+3. `GET /products?search=...` — case-insensitive search on `name` using `$regex`.
+4. `GET /products?sort=price_asc|price_desc` — sort results using `.sort()`.
+5. `GET /products?page=1&limit=10` — paginate results using `.skip()` and `.limit()`, and return `totalPages`/`totalItems` alongside the data.
+6. `GET /products?tags=popular,new` — return products matching **any** of the given tags using `$in`.
+7. Add an index on `category` (`productSchema.index({ category: 1 })`) and compare query performance using `.explain("executionStats")` before and after.
+8. Bonus: combine filtering + search + sorting + pagination into a single endpoint, matching the pattern covered in Week 7's [Pagination, Filtering & Sorting](../../week_7/class_2/README.md) class.

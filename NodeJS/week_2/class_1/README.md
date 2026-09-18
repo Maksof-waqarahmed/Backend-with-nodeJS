@@ -51,10 +51,10 @@ They simply mean *“the request has started processing”*.
 
 | Code | Name                | Brief Meaning                                                                               |
 | ---- | ------------------- | ------------------------------------------------------------------------------------------- |
-| 100  | Continue            | Server received initial part of request; client should continue. ([iana.org][1])            |
-| 101  | Switching Protocols | Server will switch protocols (e.g., to WebSocket) as requested. ([iana.org][1])             |
-| 102  | Processing          | Server received request and is processing it, but not yet a final response. ([iana.org][1]) |
-| 103  | Early Hints         | Used to send preliminary headers (e.g., Link) before full response. ([Wikipedia][2])        |
+| 100  | Continue            | Server received initial part of request; client should continue.            |
+| 101  | Switching Protocols | Server will switch protocols (e.g., to WebSocket) as requested.             |
+| 102  | Processing          | Server received request and is processing it, but not yet a final response. |
+| 103  | Early Hints         | Used to send preliminary headers (e.g., Link) before full response.        |
 
 ---
 
@@ -64,16 +64,16 @@ These indicate that the client’s request was **successfully received, understo
 
 | Code | Name                          | Brief Meaning                                                                                                                                                      |
 | ---- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 200  | OK                            | Standard success for GET, POST etc. ([iana.org][1])                                                                                                                |
-| 201  | Created                       | Request succeeded and a new resource was created. ([iana.org][1])                                                                                                  |
-| 202  | Accepted                      | Request accepted but processing not yet complete. ([iana.org][1])                                                                                                  |
-| 203  | Non-Authoritative Information | Response from a proxy rather than the origin server. ([iana.org][1])                                                                                               |
-| 204  | No Content                    | Success but no content to send back. ([iana.org][1])                                                                                                               |
-| 205  | Reset Content                 | Success; client should reset view. ([iana.org][1])                                                                                                                 |
-| 206  | Partial Content               | Partial data sent in response to a “Range” request. ([iana.org][1])                                                                                                |
-| 207  | Multi-Status                  | WebDAV: multiple responses for multiple operations. ([iana.org][1])                                                                                                |
-| 208  | Already Reported              | WebDAV: members of a DAV binding list already reported. ([iana.org][1])                                                                                            |
-| 226  | IM Used                       | The server has fulfilled a GET request for the resource, and the response is a representation of the result of one or more instance-manipulations. ([iana.org][1]) |
+| 200  | OK                            | Standard success for GET, POST etc.                                                                                                                |
+| 201  | Created                       | Request succeeded and a new resource was created.                                                                                                  |
+| 202  | Accepted                      | Request accepted but processing not yet complete.                                                                                                  |
+| 203  | Non-Authoritative Information | Response from a proxy rather than the origin server.                                                                                               |
+| 204  | No Content                    | Success but no content to send back.                                                                                                               |
+| 205  | Reset Content                 | Success; client should reset view.                                                                                                                 |
+| 206  | Partial Content               | Partial data sent in response to a “Range” request.                                                                                                |
+| 207  | Multi-Status                  | WebDAV: multiple responses for multiple operations.                                                                                                |
+| 208  | Already Reported              | WebDAV: members of a DAV binding list already reported.                                                                                            |
+| 226  | IM Used                       | The server has fulfilled a GET request for the resource, and the response is a representation of the result of one or more instance-manipulations. |
 
 ### 🧠 Example:
 
@@ -90,15 +90,15 @@ These codes tell the client that the **requested resource has moved** to another
 
 | Code | Name                                 | Brief Meaning                                                               |
 | ---- | ------------------------------------ | --------------------------------------------------------------------------- |
-| 300  | Multiple Choices                     | Multiple options for the resource; user or agent to choose. ([iana.org][1]) |
-| 301  | Moved Permanently                    | Resource permanently moved to new URI. ([Wikipedia][3])                     |
-| 302  | Found (formerly “Moved Temporarily”) | Resource temporarily at a different URI. ([iana.org][1])                    |
-| 303  | See Other                            | Response to request can be found under another URI by GET. ([iana.org][1])  |
-| 304  | Not Modified                         | Resource not modified since last request; use cache. ([iana.org][1])        |
-| 305  | Use Proxy                            | Requested resource available only via proxy. ([iana.org][1])                |
-| 306  | (Unused)                             | Previously “Switch Proxy”, now unused. ([Wikipedia][2])                     |
-| 307  | Temporary Redirect                   | Like 302 but method must not change. ([iana.org][1])                        |
-| 308  | Permanent Redirect                   | Like 301 but method cannot change. ([iana.org][1])                          |
+| 300  | Multiple Choices                     | Multiple options for the resource; user or agent to choose. |
+| 301  | Moved Permanently                    | Resource permanently moved to new URI.                     |
+| 302  | Found (formerly “Moved Temporarily”) | Resource temporarily at a different URI.                    |
+| 303  | See Other                            | Response to request can be found under another URI by GET.  |
+| 304  | Not Modified                         | Resource not modified since last request; use cache.        |
+| 305  | Use Proxy                            | Requested resource available only via proxy.                |
+| 306  | (Unused)                             | Previously “Switch Proxy”, now unused.                     |
+| 307  | Temporary Redirect                   | Like 302 but method must not change.                        |
+| 308  | Permanent Redirect                   | Like 301 but method cannot change.                          |
 
 ### 🧠 Example:
 
@@ -117,35 +117,35 @@ These indicate problems with the **client’s request** — such as wrong data, 
 
 | Code | Name                                         | Brief Meaning                                                                                               |
 | ---- | -------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| 400  | Bad Request                                  | Client sent invalid request. ([REST API Tutorial][4])                                                       |
-| 401  | Unauthorized                                 | Authentication required and has failed or not yet provided. ([iana.org][1])                                 |
-| 402  | Payment Required                             | Reserved for future use / digital payments. ([iana.org][1])                                                 |
-| 403  | Forbidden                                    | Server understands request but refuses to authorize. ([Wikipedia][5])                                       |
-| 404  | Not Found                                    | Requested resource not found. ([REST API Tutorial][4])                                                      |
-| 405  | Method Not Allowed                           | Method not supported for the resource. ([REST API Tutorial][4])                                             |
-| 406  | Not Acceptable                               | Server cannot generate content acceptable by client. ([REST API Tutorial][4])                               |
-| 407  | Proxy Authentication Required                | Client must authenticate with proxy. ([REST API Tutorial][4])                                               |
-| 408  | Request Timeout                              | Server timed out waiting for request. ([iana.org][1])                                                       |
-| 409  | Conflict                                     | Request conflicts with current state of server. ([iana.org][1])                                             |
-| 410  | Gone                                         | Resource no longer available and no forwarding address. ([REST API Tutorial][4])                            |
-| 411  | Length Required                              | Server refuses to accept request without Content-Length header. ([iana.org][1])                             |
-| 412  | Precondition Failed                          | One or more conditions given in request headers failed. ([iana.org][1])                                     |
-| 413  | Payload Too Large / Request Entity Too Large | Request is larger than server is willing/able to process. ([REST API Tutorial][4])                          |
-| 414  | URI Too Long                                 | URI requested is too long. ([iana.org][1])                                                                  |
-| 415  | Unsupported Media Type                       | Request entity has a media type the server does not support. ([REST API Tutorial][4])                       |
-| 416  | Range Not Satisfiable                        | Requested range cannot be fulfilled. ([iana.org][1])                                                        |
-| 417  | Expectation Failed                           | Server cannot meet the requirements of the Expect header. ([iana.org][1])                                   |
-| 418  | I’m a Teapot (RFC 2324)                      | Easter-egg code; server refuses to brew coffee. ([Wikipedia][2])                                            |
-| 421  | Misdirected Request                          | Request directed at a server that is not able to produce a response. ([iana.org][1])                        |
-| 422  | Unprocessable Entity                         | WebDAV: request was well-formed but unable to process. ([iana.org][1])                                      |
-| 423  | Locked                                       | WebDAV: resource is locked. ([iana.org][1])                                                                 |
-| 424  | Failed Dependency                            | WebDAV: failure in previous request dependency. ([iana.org][1])                                             |
-| 425  | Too Early                                    | Indicates that the server is unwilling to risk processing a request that might be replayed. ([iana.org][1]) |
-| 426  | Upgrade Required                             | Client should switch to a different protocol. ([iana.org][1])                                               |
-| 428  | Precondition Required                        | Request must be conditional. ([iana.org][1])                                                                |
-| 429  | Too Many Requests                            | Client sent too many requests in a given amount of time ("rate limiting"). ([iana.org][1])                  |
-| 431  | Request Header Fields Too Large              | Server refuses because headers are too large. ([iana.org][1])                                               |
-| 451  | Unavailable For Legal Reasons                | Resource unavailable for legal/censorship reason. ([WIRED][6])                                              |
+| 400  | Bad Request                                  | Client sent invalid request.                                                       |
+| 401  | Unauthorized                                 | Authentication required and has failed or not yet provided.                                 |
+| 402  | Payment Required                             | Reserved for future use / digital payments.                                                 |
+| 403  | Forbidden                                    | Server understands request but refuses to authorize.                                       |
+| 404  | Not Found                                    | Requested resource not found.                                                      |
+| 405  | Method Not Allowed                           | Method not supported for the resource.                                             |
+| 406  | Not Acceptable                               | Server cannot generate content acceptable by client.                               |
+| 407  | Proxy Authentication Required                | Client must authenticate with proxy.                                               |
+| 408  | Request Timeout                              | Server timed out waiting for request.                                                       |
+| 409  | Conflict                                     | Request conflicts with current state of server.                                             |
+| 410  | Gone                                         | Resource no longer available and no forwarding address.                            |
+| 411  | Length Required                              | Server refuses to accept request without Content-Length header.                             |
+| 412  | Precondition Failed                          | One or more conditions given in request headers failed.                                     |
+| 413  | Payload Too Large / Request Entity Too Large | Request is larger than server is willing/able to process.                          |
+| 414  | URI Too Long                                 | URI requested is too long.                                                                  |
+| 415  | Unsupported Media Type                       | Request entity has a media type the server does not support.                       |
+| 416  | Range Not Satisfiable                        | Requested range cannot be fulfilled.                                                        |
+| 417  | Expectation Failed                           | Server cannot meet the requirements of the Expect header.                                   |
+| 418  | I’m a Teapot (RFC 2324)                      | Easter-egg code; server refuses to brew coffee.                                            |
+| 421  | Misdirected Request                          | Request directed at a server that is not able to produce a response.                        |
+| 422  | Unprocessable Entity                         | WebDAV: request was well-formed but unable to process.                                      |
+| 423  | Locked                                       | WebDAV: resource is locked.                                                                 |
+| 424  | Failed Dependency                            | WebDAV: failure in previous request dependency.                                             |
+| 425  | Too Early                                    | Indicates that the server is unwilling to risk processing a request that might be replayed. |
+| 426  | Upgrade Required                             | Client should switch to a different protocol.                                               |
+| 428  | Precondition Required                        | Request must be conditional.                                                                |
+| 429  | Too Many Requests                            | Client sent too many requests in a given amount of time ("rate limiting").                  |
+| 431  | Request Header Fields Too Large              | Server refuses because headers are too large.                                               |
+| 451  | Unavailable For Legal Reasons                | Resource unavailable for legal/censorship reason.                                              |
 
 ### 🧠 Example:
 
@@ -164,17 +164,17 @@ These indicate that the **server failed** to fulfill a valid request due to inte
 
 | Code | Name                            | Brief Meaning                                                                                            |
 | ---- | ------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| 500  | Internal Server Error           | Generic server error when no more specific code fits. ([iana.org][1])                                    |
-| 501  | Not Implemented                 | Server does not support functionality required to fulfill request. ([iana.org][1])                       |
-| 502  | Bad Gateway                     | Server, while acting as gateway/proxy, received invalid response from upstream server. ([Wikipedia][7])  |
-| 503  | Service Unavailable             | Server currently unavailable (overloaded/maintenance). ([iana.org][1])                                   |
-| 504  | Gateway Timeout                 | Gateway or proxy did not get response in time. ([iana.org][1])                                           |
-| 505  | HTTP Version Not Supported      | Server does not support HTTP protocol version used in request. ([iana.org][1])                           |
-| 506  | Variant Also Negotiates         | Internal server error; transparent content negotiation loop. ([iana.org][1])                             |
-| 507  | Insufficient Storage            | WebDAV: Server unable to store representation needed to complete request. ([iana.org][1])                |
-| 508  | Loop Detected                   | WebDAV: Server detected infinite loop while processing a request with “Depth: infinity”. ([iana.org][1]) |
-| 510  | Not Extended                    | Further extensions to the request are required for server to fulfil it. ([iana.org][1])                  |
-| 511  | Network Authentication Required | Client needs network authentication (e.g., captive portal) before accessing network. ([iana.org][1])     |
+| 500  | Internal Server Error           | Generic server error when no more specific code fits.                                    |
+| 501  | Not Implemented                 | Server does not support functionality required to fulfill request.                       |
+| 502  | Bad Gateway                     | Server, while acting as gateway/proxy, received invalid response from upstream server.  |
+| 503  | Service Unavailable             | Server currently unavailable (overloaded/maintenance).                                   |
+| 504  | Gateway Timeout                 | Gateway or proxy did not get response in time.                                           |
+| 505  | HTTP Version Not Supported      | Server does not support HTTP protocol version used in request.                           |
+| 506  | Variant Also Negotiates         | Internal server error; transparent content negotiation loop.                             |
+| 507  | Insufficient Storage            | WebDAV: Server unable to store representation needed to complete request.                |
+| 508  | Loop Detected                   | WebDAV: Server detected infinite loop while processing a request with “Depth: infinity”. |
+| 510  | Not Extended                    | Further extensions to the request are required for server to fulfil it.                  |
+| 511  | Network Authentication Required | Client needs network authentication (e.g., captive portal) before accessing network.     |
 
 ### 🧠 Example:
 

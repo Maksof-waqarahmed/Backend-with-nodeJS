@@ -83,10 +83,12 @@ This structure improves:
 
 ## 📄 4. Example: Router and Controller in Express.js
 
-### 📁 `controllers/user.controller.js`
+### 📁 `controllers/user.controller.ts`
 
-```js
-export const getAllUsers = async (req, res) => {
+```ts
+import { Request, Response } from "express";
+
+export const getAllUsers = async (req: Request, res: Response) => {
   try {
     // Example data (replace with DB call)
     const users = [
@@ -100,7 +102,7 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-export const createUser = async (req, res) => {
+export const createUser = async (req: Request, res: Response) => {
   try {
     const { name } = req.body;
 
@@ -113,11 +115,11 @@ export const createUser = async (req, res) => {
 
 ---
 
-### 📁 `routes/user.routes.js`
+### 📁 `routes/user.routes.ts`
 
-```js
+```ts
 import express from "express";
-import { getAllUsers, createUser } from "../controllers/user.controller.js";
+import { getAllUsers, createUser } from "../controllers/user.controller";
 
 const router = express.Router();
 
@@ -132,11 +134,11 @@ export default router;
 
 ---
 
-### 📁 `index.js` (Main File)
+### 📁 `index.ts` (Main File)
 
-```js
+```ts
 import express from "express";
-import userRoutes from "./routes/user.routes.js";
+import userRoutes from "./routes/user.routes";
 
 const app = express();
 app.use(express.json());
@@ -148,6 +150,8 @@ app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
 ```
+
+> 💡 **Note:** With `esModuleInterop`/`moduleResolution: "node"` set in `tsconfig.json` (as used throughout this course), you import local TypeScript files **without** the `.js`/`.ts` extension — unlike plain Node.js ES Modules, which require the extension.
 
 ---
 
@@ -191,9 +195,12 @@ This separation keeps everything:
 
 Controller handles actual DB logic:
 
-```js
-export const getPosts = async (req, res) => {
-  const posts = await prisma.post.findMany();
+```ts
+import { Request, Response } from "express";
+import Post from "../models/post.model";
+
+export const getPosts = async (req: Request, res: Response) => {
+  const posts = await Post.find();
   res.json(posts);
 };
 ```

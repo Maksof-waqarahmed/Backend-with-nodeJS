@@ -63,9 +63,7 @@ The server checks:
 **File:** `types/User.ts`
 
 ```ts
-import { Document } from "mongoose";
-
-export interface IUser extends Document {
+export interface IUser {
   name: string;
   email: string;
   password: string;
@@ -74,6 +72,8 @@ export interface IUser extends Document {
   createdAt: Date;
 }
 ```
+
+> 💡 No need to `extend Document` — `mongoose.Schema<IUser>` and `mongoose.model<IUser>(...)` (Mongoose 6+) infer `Document`'s properties automatically, matching this repo's own `Backend/src/user/user.model.ts`.
 
 ---
 
@@ -231,6 +231,23 @@ export const authenticate = (
   }
 };
 ```
+
+> ⚠️ **Compile error waiting to happen:** `req.user = decoded` will fail with `Property 'user' does not exist on type 'Request'` — Express's built-in `Request` type has no `user` property by default. You must **augment** the type first via a declaration file:
+>
+> ```ts
+> // types/express.d.ts
+> import "express";
+>
+> declare global {
+>   namespace Express {
+>     interface Request {
+>       user?: string | import("jsonwebtoken").JwtPayload;
+>     }
+>   }
+> }
+> ```
+>
+> This technique (called **module augmentation**) is covered in depth in the [TypeScript course's Week 6, Class 1](../../../TypeScript/week_6/class_1/README.md).
 
 ---
 

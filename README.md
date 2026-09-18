@@ -16,6 +16,31 @@ By the end of this course, learners will be able to design, develop, and deploy 
 
 ---
 
+## 📂 Repository Structure
+
+| Folder | What's Inside |
+|---|---|
+| [`NodeJS/`](NodeJS/) | Week-wise / class-wise backend course notes (Node.js, Express, MongoDB, Redis, auth, testing, deployment) |
+| [`TypeScript/`](TypeScript/) | A dedicated, standalone TypeScript course — basic to advance, week-wise / class-wise |
+| [`Backend/`](Backend/) | The real Express + TypeScript + MongoDB e-commerce API built throughout the course |
+| [`Frontend/`](Frontend/) | The Next.js client application consuming the backend API |
+
+### 🧭 NodeJS Course Navigation
+
+| Week | Classes | Topics |
+|---|---|---|
+| **1** | [Class 1](NodeJS/week_1/class_1/README.md) · [Class 2](NodeJS/week_1/class_2/README.md) · [Class 3](NodeJS/week_1/class_3/README.md) | Backend intro & client-server model, building a Node.js server with the `http` module, core modules & async programming (callbacks/Promises/async-await) — *(TypeScript itself is taught separately in the [TypeScript course](TypeScript/README.md))* |
+| — | [Event Loop](NodeJS/event_loop/README.md) | Deep dive: call stack, libuv, event loop phases, microtasks vs macrotasks |
+| **2** | [Class 1](NodeJS/week_2/class_1/README.md) · [Class 2](NodeJS/week_2/class_2/README.md) | HTTP status codes, REST APIs, HTTP methods, Express basics & CRUD, middleware, type-safe requests/responses |
+| **3** | [Class 1](NodeJS/week_3/class_1/README.md) · [Class 2](NodeJS/week_3/class_2/README.md) | Routers & controllers, database systems, ERD, normalization |
+| **4** | [Class 1](NodeJS/week_4/class_1/README.md) · [Class 2](NodeJS/week_4/class_2/README.md) | MongoDB & Mongoose, schema design, advanced querying & filtering |
+| **5** | [Class 1](NodeJS/week_5/class_1/README.md) · [Class 2](NodeJS/week_5/class_2/README.md) · [Class 3](NodeJS/week_5/class_3/README.md) | Zod validation, JWT authentication & authorization, centralized error handling & logging (Winston/Morgan) |
+| **6** | [Class 1](NodeJS/week_6/class_1/README.md) · [Class 2](NodeJS/week_6/class_2/README.md) · [Class 3](NodeJS/week_6/class_3/README.md) | Role-based access control (RBAC) & email, cron jobs, Redis caching strategies |
+| **7** | [Class 1](NodeJS/week_7/class_1/README.md) · [Class 2](NodeJS/week_7/class_2/README.md) | File uploads (Multer + Cloudinary), pagination/filtering/sorting |
+| **8** | [Class 1](NodeJS/week_8/class_1/README.md) · [Class 2](NodeJS/week_8/class_2/README.md) · [Class 3](NodeJS/week_8/class_3/README.md) | Validation & security, deployment, testing (Jest + Supertest) |
+
+---
+
 ## 📋 Prerequisites
 
 Before starting this course, ensure you have:
@@ -42,6 +67,8 @@ After completing this course, you will be able to:
 ---
 
 ## 🧭 Course Outline
+
+> 📌 This is the high-level curriculum. For the actual week-by-week materials as taught, see [NodeJS Course Navigation](#-nodejs-course-navigation) above.
 
 | **Week** | **Topics**                                  | **Key Learning Areas**                        |
 | -------- | ------------------------------------------- | --------------------------------------------- |
@@ -87,6 +114,7 @@ In the final project, students will build a **complete production-ready backend*
 * **node-cron**
 * **Multer**
 * **Winston / Morgan** for logging
+* **Jest / Supertest** for testing
 
 ---
 

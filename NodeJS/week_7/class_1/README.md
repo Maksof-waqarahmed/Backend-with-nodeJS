@@ -438,6 +438,74 @@ export const uploadImage = async (
 
 ---
 
+## ⚡ A Better Approach: Direct Upload with `multer-storage-cloudinary`
+
+The two-step flow above (Multer saves to local disk → then manually upload that file to Cloudinary) works, but it means every uploaded file briefly touches your server's disk before being pushed to the cloud — unnecessary I/O, and a problem on serverless/read-only filesystems.
+
+**This repository's own code** (`Backend/src/helpers/upload.ts` and `Backend/src/config/cloudinary.ts`) uses a cleaner approach: `multer-storage-cloudinary`, a Multer storage engine that uploads **directly** to Cloudinary — no local disk step at all.
+
+```bash
+npm install multer-storage-cloudinary
+```
+
+```ts
+// config/cloudinary.ts
+import { v2 as cloudinary } from "cloudinary";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
+  api_key: process.env.CLOUDINARY_API_KEY!,
+  api_secret: process.env.CLOUDINARY_API_SECRET!,
+});
+
+export default cloudinary;
+```
+
+```ts
+// helpers/upload.ts
+import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../config/cloudinary";
+
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "products",
+    allowed_formats: ["jpg", "png", "jpeg", "webp"],
+  } as any,
+});
+
+export const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+});
+```
+
+Now in your route, `req.file.path` (or `req.files[i].path`) is **already the final Cloudinary URL** — no separate `cloudinary.uploader.upload(...)` call needed:
+
+```ts
+// product.controllers.ts
+export const createProduct = async (req: Request, res: Response) => {
+  const images = req.files && Array.isArray(req.files)
+    ? req.files.map((file: any) => ({ url: file.path })) // already a Cloudinary URL!
+    : [];
+
+  const product = await Product.create({ ...req.body, images });
+  res.status(201).json({ success: true, data: product });
+};
+```
+
+| | Two-step (disk → cloud) | Direct (`multer-storage-cloudinary`) |
+|---|---|---|
+| Touches local disk | ✅ Yes, briefly | ❌ No |
+| Works on serverless/read-only filesystems | ❌ Often breaks | ✅ Yes |
+| Extra `cloudinary.uploader.upload()` call needed | ✅ Yes | ❌ No — handled automatically |
+| Good for learning the underlying steps | ✅ Yes | Less transparent, but more production-ready |
+
+> 💡 Learning the manual two-step version first is valuable because it shows you **what's actually happening** underneath. In real projects (like this repo's `Backend/`), prefer the direct `multer-storage-cloudinary` approach.
+
+---
+
 ## ☁️ AWS S3 (Concept Only – Beginner)
 
 Note for students:

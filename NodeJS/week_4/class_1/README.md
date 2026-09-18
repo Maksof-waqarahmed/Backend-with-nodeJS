@@ -111,7 +111,7 @@ SECRET_KEY=mySecret123
 
 **File:** `server.ts`
 
-```javascript
+```ts
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
@@ -121,18 +121,17 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log("MongoDB connected successfully"))
-.catch(err => console.error("MongoDB connection error:", err));
+mongoose.connect(process.env.MONGO_URI as string)
+  .then(() => console.log("MongoDB connected successfully"))
+  .catch(err => console.error("MongoDB connection error:", err));
 
 app.get("/", (req: Request, res: Response) => res.send("Hello MongoDB with Express!"));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 ```
+
+> ⚠️ **Note:** `process.env.MONGO_URI` has the type `string | undefined` in TypeScript's strict mode, so it must be cast with `as string` (or validated first) before passing it to `mongoose.connect()`. Also, older tutorials show `useNewUrlParser`/`useUnifiedTopology` options — these are **deprecated and unnecessary** since Mongoose 6+ (this course uses Mongoose 9) and will cause a TypeScript error if included.
 
 ---
 
@@ -142,7 +141,7 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 **File:** `models/User.ts`
 
-```javascript
+```ts
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
@@ -302,16 +301,14 @@ new mongoose.Schema({}, {
 **File:** `types/User.ts`
 
 ```typescript
-import { Document } from "mongoose";
-
-export interface IUser extends Document {
-  name: string
-  email: string
-  role?: "user" | "admin"
-  skills?: string[]
-  experience?: number
-  createdAt?: Date
-  updatedAt?: Date
+export interface IUser {
+  name: string;
+  email: string;
+  role?: "user" | "admin";
+  skills?: string[];
+  experience?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 ```
 
@@ -321,7 +318,7 @@ export interface IUser extends Document {
 import mongoose from "mongoose";
 import { IUser } from "../types/User";
 
-const userSchema = new Schema<IUser>(
+const userSchema = new mongoose.Schema<IUser>(
   {
     name: { type: String, required: true, trim: true },
     email: {
@@ -347,6 +344,8 @@ export const User = mongoose.model<IUser>("User", userSchema)
 ```
 
 > ✅ This ensures **type safety** in TypeScript projects.
+>
+> ⚠️ **Note:** Older Mongoose + TypeScript tutorials have your interface `extend Document` (e.g. `interface IUser extends Document`). Since Mongoose 6+ (this course uses Mongoose 9), this is **no longer necessary** — `mongoose.Schema<IUser>` and `mongoose.model<IUser>(...)` already infer all of `Document`'s properties (`_id`, `.save()`, etc.) automatically. This is exactly the pattern used in this repo's own `Backend/src/user/user.model.ts`.
 
 ---
 
@@ -354,16 +353,17 @@ export const User = mongoose.model<IUser>("User", userSchema)
 
 ### 1️⃣ Create (Insert)
 
-```javascript
-import User from "./models/User.js";
+```ts
+import { Request, Response } from "express";
+import { User } from "./models/User";
 
-app.post("/users", async (req, res) => {
+app.post("/users", async (req: Request, res: Response) => {
   try {
     const newUser = new User(req.body);
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: "Error creating user: " + error });
   }
 });
 ```
@@ -374,27 +374,27 @@ app.post("/users", async (req, res) => {
 
 **Get all users:**
 
-```javascript
-app.get("/users", async (req, res) => {
+```ts
+app.get("/users", async (req: Request, res: Response) => {
   try {
     const users = await User.find();
     res.json(users);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error fetching users: " + error });
   }
 });
 ```
 
 **Get user by ID:**
 
-```javascript
-app.get("/users/:id", async (req, res) => {
+```ts
+app.get("/users/:id", async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error fetching user: " + error });
   }
 });
 ```
@@ -403,8 +403,8 @@ app.get("/users/:id", async (req, res) => {
 
 ### 3️⃣ Update
 
-```javascript
-app.put("/users/:id", async (req, res) => {
+```ts
+app.put("/users/:id", async (req: Request, res: Response) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
@@ -414,7 +414,7 @@ app.put("/users/:id", async (req, res) => {
     if (!updatedUser) return res.status(404).json({ message: "User not found" });
     res.json(updatedUser);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: "Error updating user: " + error });
   }
 });
 ```
@@ -423,17 +423,19 @@ app.put("/users/:id", async (req, res) => {
 
 ### 4️⃣ Delete
 
-```javascript
-app.delete("/users/:id", async (req, res) => {
+```ts
+app.delete("/users/:id", async (req: Request, res: Response) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     if (!deletedUser) return res.status(404).json({ message: "User not found" });
     res.json({ message: "User deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error deleting user: " + error });
   }
 });
 ```
+
+> 💡 **Why `"..." + error` instead of `error.message`?** In TypeScript's strict mode, a `catch` block's error variable has the type `unknown` by default — you can't access `.message` on it directly without first narrowing its type (e.g. `error instanceof Error`). String-concatenating it (as this repo's own controllers do throughout `Backend/src/`) sidesteps that without extra boilerplate.
 
 ---
 

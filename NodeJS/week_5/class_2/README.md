@@ -480,17 +480,23 @@ res.cookie("refreshToken", refreshToken, {
 ## 🔄 Refresh Token Endpoint
 
 ```ts
-app.post("/refresh", (req, res) => {
-  const token = req.cookies.refreshToken;
+import { Request, Response } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken";
+
+app.post("/refresh", (req: Request, res: Response) => {
+  const token = req.cookies?.refreshToken;
 
   if (!token)
     return res.status(401).json({ message: "No refresh token" });
 
   jwt.verify(token, process.env.REFRESH_SECRET as string, (err, decoded) => {
-    if (err) return res.status(403).json({ message: "Invalid refresh token" });
+    if (err || !decoded) return res.status(403).json({ message: "Invalid refresh token" });
+
+    // `decoded` is typed as `string | JwtPayload` — narrow it before accessing `.id`
+    const payload = decoded as JwtPayload;
 
     const newAccessToken = jwt.sign(
-      { id: decoded.id },
+      { id: payload.id },
       process.env.JWT_SECRET as string,
       { expiresIn: "15m" }
     );
@@ -499,6 +505,10 @@ app.post("/refresh", (req, res) => {
   });
 });
 ```
+
+> ⚠️ **Two gotchas to remember:**
+> 1. `req.cookies` requires the `cookie-parser` middleware (`npm install cookie-parser` + `app.use(cookieParser())`) — it doesn't exist on `req` by default.
+> 2. `jwt.verify`'s callback gives you `decoded: string | JwtPayload | undefined`, so accessing `decoded.id` directly is a TypeScript error — cast it to `JwtPayload` first (as shown above) after confirming it isn't `undefined`.
 
 ---
 

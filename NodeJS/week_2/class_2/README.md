@@ -246,7 +246,9 @@ Now any request to `/users` passes through the router-level middleware first.
 Error-handling middleware has **four parameters** — `(err, req, res, next)`:
 
 ```ts
-app.use((err: Error, req: Request, res: Response, next: Function) => {
+import { Request, Response, NextFunction } from "express";
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error("❌ Error:", err.message);
   res.status(500).json({ message: "Internal Server Error" });
 });
@@ -259,7 +261,7 @@ Even if something crashes inside your route, this middleware will **gracefully h
 ## 💪 Full Example — Combining Everything
 
 ```ts
-import express, { Application, Request, Response } from "express";
+import express, { Application, Request, Response, NextFunction } from "express";
 import { logger } from "./middleware/logger";
 
 const app: Application = express();
@@ -274,7 +276,7 @@ app.get("/users", (req: Request, res: Response) => res.json([{ id: 1, name: "Ran
 app.post("/users", (req: Request, res: Response) => res.status(201).json(req.body));
 
 // Error handler
-app.use((err: Error, req: Request, res: Response, next: Function) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({ message: err.message });
 });
 
